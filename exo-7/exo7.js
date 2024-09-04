@@ -32,12 +32,12 @@ function affichage(results_list) {
     // Boucle à travers chaque objet dans results_list
     let resultsDOM = document.getElementById("results");
     for (let i = 0; i < results_list.length; i++) {
-        let card = create_card( results_list[i] );
+        let card = create_card(results_list[i]);
         resultsDOM.appendChild(card); // Ajouter la carte au corps du document
     }
 }
 
-function create_card( item_infos ){
+function create_card(item_infos) {
     // Créer une div pour la carte
     const card = document.createElement('div');
     card.setAttribute('class', 'card');
@@ -60,14 +60,25 @@ function create_card( item_infos ){
     return card;
 }
 
-function find_items(recherche){
+function find_items(recherche) {
+    let find = [];
     if (recherche === "") {
+        if (verifieStock()) {
+            for (let j = 0; j < jsonDatas.length; j++) {
+                if (jsonDatas[j].quantity > 0)
+                    find.push(jsonDatas[j]);
+            }
+            return find;
+        }
         return jsonDatas;
     }
-
-    let find = [];
     for (let i = 0; i < jsonDatas.length; i++) {
-        if (jsonDatas[i].type.toLowerCase() === recherche) {
+        if (verifieStock()) {
+            if (jsonDatas[i].type.toLowerCase() === recherche) {
+                if (jsonDatas[i].quantity > 0)
+                    find.push(jsonDatas[i]);
+            }
+        } else if (jsonDatas[i].type.toLowerCase() === recherche) {
             find.push(jsonDatas[i]);
         }
     }
@@ -87,8 +98,14 @@ function onClic() {
     affichage(liste);
 }
 
+function verifieStock() {
+    if (document.getElementById("myCheck").checked) {
+        return true;
+    }
+}
 
-document.addEventListener("DOMContentLoaded", function(event) {
+
+document.addEventListener("DOMContentLoaded", function (event) {
     tradObjet()
     affichage(jsonDatas);
 });
