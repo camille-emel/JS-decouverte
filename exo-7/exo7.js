@@ -25,55 +25,71 @@ function tradObjet() {
     for (let i = 0; i < jsonDatas.length; i++) {
         jsonDatas[i].typeTraduit = translate[jsonDatas[i].type];
     }
-    afficherObjet(jsonDatas);
+    // afficherObjet(jsonDatas);
 }
 
-// tradObjet()
+function affichage(results_list) {
+    // Boucle à travers chaque objet dans results_list
+    let resultsDOM = document.getElementById("results");
+    for (let i = 0; i < results_list.length; i++) {
+        let card = create_card( results_list[i] );
+        resultsDOM.appendChild(card); // Ajouter la carte au corps du document
+    }
+}
 
-
-
-
-
-
-
-function affichage(trouve){
-// Boucle à travers chaque objet dans jsonDatas
-for (let i = 0; i < jsonDatas.length; i++) {
-    const item = jsonDatas[i];
-
+function create_card( item_infos ){
     // Créer une div pour la carte
     const card = document.createElement('div');
     card.setAttribute('class', 'card');
-
     // Boucle à travers chaque attribut de l'objet
-    if (isset(trouve)) {
-
-    }
-    for (let key in item) {
-        if (item.hasOwnProperty(key)) {
+    for (let key in item_infos) {
+        if (item_infos.hasOwnProperty(key)) {
             // Créer un paragraphe pour chaque attribut
             let pElement;
-            if (key === "name"){
-                 pElement = document.createElement('h2');
-            }else {
-             pElement = document.createElement('p');}
+            if (key === "name") {
+                pElement = document.createElement('h2');
+            } else {
+                pElement = document.createElement('p');
+            }
             // Ajouter le texte sous la forme "attribut: valeur"
-            pElement.textContent = `${key.charAt(0).toUpperCase() + key.slice(1)}: ${item[key]}`;
+            pElement.textContent = `${key.charAt(0).toUpperCase() + key.slice(1)}: ${item_infos[key]}`;
             // Ajouter le paragraphe à la carte
             card.appendChild(pElement);
         }
     }
-    // Ajouter la carte au corps du document
-    document.body.appendChild(card);
-}
+    return card;
 }
 
-affichage()
+function find_items(recherche){
+    if (recherche === "") {
+        return jsonDatas;
+    }
+
+    let find = [];
+    for (let i = 0; i < jsonDatas.length; i++) {
+        if (jsonDatas[i].type.toLowerCase() === recherche) {
+            find.push(jsonDatas[i]);
+        }
+    }
+    return find;
+}
 
 function onClic() {
-    var x = document.getElementById("text").value;
-    console.log(x);
-    affichage(x)
-    }
-    // document.getElementById("demo").innerHTML = x;
-// }
+    let recherche = document.getElementById("text").value.trim().toLowerCase();
+
+    //Test
+    // console.log('recherche', recherche);
+    // console.log('recherche is undef ?', recherche === undefined);
+    // console.log('recherche is empty ?', recherche === "");
+
+    document.getElementById("results").innerHTML = "";
+    let liste = find_items(recherche);
+    affichage(liste);
+}
+
+
+document.addEventListener("DOMContentLoaded", function(event) {
+    tradObjet()
+    affichage(jsonDatas);
+});
+
