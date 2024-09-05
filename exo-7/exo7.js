@@ -62,39 +62,63 @@ function create_card(item_infos) {
 
 function find_items(recherche) {
     let find = [];
-    if (recherche === "") {
-        if (verifieStock()) {
-            for (let j = 0; j < jsonDatas.length; j++) {
-                if (jsonDatas[j].quantity > 0)
-                    find.push(jsonDatas[j]);
+    switch (recherche) {
+        //recherche vide
+        case "":
+            if (verifieStock()) {
+                for (let j = 0; j < jsonDatas.length; j++) {
+                    if (jsonDatas[j].quantity > 0)
+                        find.push(jsonDatas[j]);
+                }
+            } else {
+                find = jsonDatas;
             }
-            return find;
-        }
-        return jsonDatas;
-    }
-    for (let i = 0; i < jsonDatas.length; i++) {
-        if (verifieStock()) {
-            if (jsonDatas[i].type.toLowerCase() === recherche) {
-                if (jsonDatas[i].quantity > 0)
+            break;
+
+        default :
+            for (let i = 0; i < jsonDatas.length; i++) {
+                if (verifieStock()) {
+                    if (jsonDatas[i].type.toLowerCase() === recherche && jsonDatas[i].quantity > 0) {
+                            find.push(jsonDatas[i]);
+                    }
+                } else if (jsonDatas[i].type.toLowerCase() === recherche) {
                     find.push(jsonDatas[i]);
+                }
             }
-        } else if (jsonDatas[i].type.toLowerCase() === recherche) {
-            find.push(jsonDatas[i]);
-        }
+            break;
     }
     return find;
 }
 
-function onClic() {
+function sort(liste, sortOption) {
+    switch (sortOption) {
+        case "sortpriceASC":
+            liste.sort((a, b) => a.price - b.price);
+            break;
+        case "sortpriceDESC":
+            liste.sort((a, b) => b.price - a.price);
+            break;
+        case "sortASC":
+            liste.sort((a, b) => a.name.localeCompare(b.name));
+            break;
+        case "sortDESC":
+            liste.sort((a, b) => b.name.localeCompare(a.name));
+            break;
+    }
+}
+//filouterie askip ?
+function sortButton() {
     let recherche = document.getElementById("text").value.trim().toLowerCase();
-
-    //Test
-    // console.log('recherche', recherche);
-    // console.log('recherche is undef ?', recherche === undefined);
-    // console.log('recherche is empty ?', recherche === "");
-
     document.getElementById("results").innerHTML = "";
+
     let liste = find_items(recherche);
+    let sortOptionElement = document.querySelector('input[name="sortOption"]:checked');
+    if (!sortOptionElement && !recherche){
+        window.location.reload()
+    }
+    else if (sortOptionElement) {
+        sort(liste, sortOptionElement.id);
+    }
     affichage(liste);
 }
 
@@ -103,6 +127,7 @@ function verifieStock() {
         return true;
     }
 }
+
 
 
 document.addEventListener("DOMContentLoaded", function (event) {
