@@ -42,13 +42,11 @@ function create_card(item_infos) {
     const card = document.createElement('div');
     card.setAttribute('class', 'card');
     // Boucle à travers chaque attribut de l'objet
-    console.log(item_infos);
     for (let key in item_infos) {
-        console.log(item_infos[key]);
         if (item_infos.hasOwnProperty(key)) {
             // Créer un paragraphe pour chaque attribut
             let pElement;
-            if (key === "Items") {
+            if (key === "name") {
                 pElement = document.createElement('h2');
             } else {
                 pElement = document.createElement('p');
