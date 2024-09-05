@@ -12,14 +12,48 @@
     <button type="button" onclick="sortButton()">Search</button>
     <br>
     <input type="checkbox" name="sortOption" id="myCheck">Check if there is stocks
-    <input type="checkbox" name="sortOption" id="sortpriceASC">sortpriceASC
-    <input type="checkbox" name="sortOption" id="sortpriceDESC">sortpriceDESC
-    <input type="checkbox" name="sortOption" id="sortASC">sortASC
-    <input type="checkbox" name="sortOption" id="sortDESC">sortDESC
-
+    <input type="checkbox" name="sortOption" id="sortpriceASC">ASC-price
+    <input type="checkbox" name="sortOption" id="sortpriceDESC">DESC-price
+    <input type="checkbox" name="sortOption" id="sortASC">ASC
+    <input type="checkbox" name="sortOption" id="sortDESC">DESC
 </div>
+<h1>Ajouter un nouvel objet</h1>
+<form id="itemForm">
+    <!-- Name field -->
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required>
+    <br><br>
+
+    <!-- Type field -->
+    <label for="type">Type:</label>
+    <select id="type" name="type" required>
+        <option value="car">Car</option>
+        <option value="house">House</option>
+        <option value="game">Game</option>
+        <option value="videoGame">Video Game</option>
+        <option value="show">Show</option>
+    </select>
+    <br><br>
+
+    <!-- Description field -->
+    <label for="description">Description:</label>
+    <textarea id="description" name="description"></textarea>
+    <br><br>
+
+    <!-- Price field -->
+    <label for="price">Price:</label>
+    <input type="number" id="price" name="price" min="0" required>
+    <br><br>
+
+    <!-- Quantity field -->
+    <label for="quantity">Quantity:</label>
+    <input type="number" id="quantity" name="quantity" min="0" required>
+    <br><br>
+
+    <!-- Submit button -->
+    <button type="button" onclick="addItem()">Add Item</button>
+</form>
 <div id="results"></div>
-<div id="form"></div>
 <script src="datas.js"></script>
 <script src="exo7.js"></script>
 </body>

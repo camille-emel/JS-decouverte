@@ -79,7 +79,7 @@ function find_items(recherche) {
             for (let i = 0; i < jsonDatas.length; i++) {
                 if (verifieStock()) {
                     if (jsonDatas[i].type.toLowerCase() === recherche && jsonDatas[i].quantity > 0) {
-                            find.push(jsonDatas[i]);
+                        find.push(jsonDatas[i]);
                     }
                 } else if (jsonDatas[i].type.toLowerCase() === recherche) {
                     find.push(jsonDatas[i]);
@@ -106,17 +106,17 @@ function sort(liste, sortOption) {
             break;
     }
 }
-//filouterie askip ?
+
 function sortButton() {
     let recherche = document.getElementById("text").value.trim().toLowerCase();
     document.getElementById("results").innerHTML = "";
 
     let liste = find_items(recherche);
     let sortOptionElement = document.querySelector('input[name="sortOption"]:checked');
-    if (!sortOptionElement && !recherche){
-        window.location.reload()
-    }
-    else if (sortOptionElement) {
+
+    if (!sortOptionElement && !recherche) {
+        liste = jsonDatas;
+    } else if (sortOptionElement) {
         sort(liste, sortOptionElement.id);
     }
     affichage(liste);
@@ -127,6 +127,21 @@ function verifieStock() {
         return true;
     }
 }
+//made by gpt
+function addItem() {
+    const newItem = {
+        name: document.getElementById('name').value,
+        type: document.getElementById('type').value,
+        description: document.getElementById('description').value,
+        price: parseInt(document.getElementById('price').value),
+        quantity: parseInt(document.getElementById('quantity').value)
+    };
+    jsonDatas.push(newItem);
+    sortButton();
+}
+
+
+
 
 
 
@@ -134,4 +149,3 @@ document.addEventListener("DOMContentLoaded", function (event) {
     tradObjet()
     affichage(jsonDatas);
 });
-
