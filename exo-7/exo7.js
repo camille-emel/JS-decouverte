@@ -37,22 +37,30 @@ function affichage(results_list) {
     }
 }
 
-function create_card(item_infos) {
+function create_card(items) {
     // Créer une div pour la carte
     const card = document.createElement('div');
     card.setAttribute('class', 'card');
     // Boucle à travers chaque attribut de l'objet
-    for (let key in item_infos) {
-        if (item_infos.hasOwnProperty(key)) {
-            // Créer un paragraphe pour chaque attribut
+
+    for (const item of items.items) {
+        for (const [key, value] of Object.entries(item)) {
             let pElement;
+
             if (key === "name") {
                 pElement = document.createElement('h2');
+            } else if (key === "contact") {
+                for (const [subKey, subValue] of Object.entries(value)) {
+                    let subElement = document.createElement('p');
+                    subElement.textContent = `${subKey.charAt(0).toUpperCase() + subKey.slice(1)}: ${subValue}`;
+                    card.appendChild(subElement);
+                }
+                continue; // On passe à la prochaine clé de l'item principal
             } else {
                 pElement = document.createElement('p');
             }
             // Ajouter le texte sous la forme "attribut: valeur"
-            pElement.textContent = `${key.charAt(0).toUpperCase() + key.slice(1)}: ${item_infos[key]}`;
+            pElement.textContent = `${key.charAt(0).toUpperCase() + key.slice(1)}: ${value}`;
             // Ajouter le paragraphe à la carte
             card.appendChild(pElement);
         }
@@ -67,9 +75,10 @@ function find_items(recherche) {
         case "":
             if (verifieStock()) {
                 for (let j = 0; j < jsonDatas.length; j++) {
-                    if (jsonDatas[j].quantity > 0)
+                    for (let k = 0; k < jsonDatas[j].length; k++) {
+                    if (jsonDatas[j].items[k].quantity > 0)
                         find.push(jsonDatas[j]);
-                }
+                }}
             } else {
                 find = jsonDatas;
             }
@@ -115,6 +124,7 @@ function sortButton() {
     let sortOptionElement = document.querySelector('input[name="sortOption"]:checked');
 
     if (!sortOptionElement && !recherche) {
+        // window.location.reload();
         liste = jsonDatas;
     } else if (sortOptionElement) {
         sort(liste, sortOptionElement.id);
@@ -123,29 +133,24 @@ function sortButton() {
 }
 
 function verifieStock() {
-    if (document.getElementById("myCheck").checked) {
-        return true;
-    }
+    return document.getElementById("myCheck").checked;
 }
-//made by gpt
+
+//made by gpt // ajout de "?" pour
 function addItem() {
     const newItem = {
-        name: document.getElementById('name').value,
-        type: document.getElementById('type').value,
-        description: document.getElementById('description').value,
-        price: parseInt(document.getElementById('price').value),
-        quantity: parseInt(document.getElementById('quantity').value)
+        name: document.getElementById('name')?.value,
+        type: document.getElementById('type')?.value,
+        description: document.getElementById('description')?.value,
+        price: parseInt(document.getElementById('price')?.value),
+        quantity: parseInt(document.getElementById('quantity')?.value)
     };
     jsonDatas.push(newItem);
     sortButton();
 }
 
 
-
-
-
-
 document.addEventListener("DOMContentLoaded", function (event) {
-    tradObjet()
+    // tradObjet()
     affichage(jsonDatas);
 });
