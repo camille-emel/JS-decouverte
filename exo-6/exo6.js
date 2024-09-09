@@ -77,13 +77,18 @@ function calculeScoreTeam() {
     }
     return score;
 }
+// function calculeScoreOpponent() {
+//     let score = 0;
+//     for (let i = 0; i < team.games.length; i++) {
+//         score += team.games[i].opponentPoints;
+//     }
+//     return score;
+// }
+
 function calculeScoreOpponent() {
-    let score = 0;
-    for (let i = 0; i < team.games.length; i++) {
-        score += team.games[i].opponentPoints;
-    }
-    return score;
+    return team.games.reduce((total, game) => total + game.opponentPoints, 0);
 }
+
 
 function oldestPlayer(){
     let oldestPlayer = team.players[0]
